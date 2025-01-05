@@ -1,1 +1,3 @@
-telethon colorama asyncio
+telethon 
+colorama 
+asyncio
