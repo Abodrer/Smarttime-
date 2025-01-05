@@ -34,8 +34,10 @@ def save_settings():
 
 # إعادة تحميل الإعدادات
 def load_settings():
-    with open(SETTINGS_FILE, "r") as f:
-        return json.load(f)
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, "r") as f:
+            return json.load(f)
+    return {"format": "12", "my_id": None}
 
 # تحويل الوقت إلى أرقام جميلة
 def beautify_time(time_string):
@@ -55,8 +57,8 @@ async def dot_start(event):
         await event.respond(
             "<b>✨ أهلاً بيك بسورس <u>𝗦𝗺𝗮𝗿𝘁𝗧𝗶𝗺𝗲</u>! 👋</b>\n"
             "<i>🛠️ الأوامر المتاحة:</i>\n\n"
-            "🔹 <code>set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
-            "🔹 <code>set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
+            "— <code>set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
+            "— <code>set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
             "<b>⌚ يتم تحديث الوقت تلقائيًا حسب الإعدادات.</b>\n\n"
             "<a href='https://t.me/oliceer'>🧑‍💻 المطور: 𝗢𝗹𝗶𝗰𝗲𝗲𝗿</a>",
             parse_mode="html"
@@ -86,7 +88,7 @@ async def change_name():
             if current_time != prev_time:
                 await client(UpdateProfileRequest(first_name=beautified_time))
                 prev_time = current_time
-            await asyncio.sleep(1.5)
+            await asyncio.sleep(5)  # مدة التحديث (يمكن تعديلها)
         except Exception as e:
             print(f"{Fore.RED}Error: {e}")
 
