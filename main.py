@@ -81,8 +81,13 @@ async def change_name():
             print(f"{Fore.RED}Error: {e}")
 
 async def main():
-    phone_number = input("Enter your phone number (with country code): ")  # Request phone number in English
-    await client.start(phone_number)
+    # تحقق مما إذا كان هناك جلسة موجودة بالفعل
+    if not await client.is_user_authorized():
+        phone_number = input("Enter your phone number (with country code): ")  # Request phone number if not authorized
+        await client.start(phone_number)
+    else:
+        print("You are already logged in!")
+    
     if settings["my_id"] is None:
         me = await client.get_me()
         settings["my_id"] = me.id
@@ -96,7 +101,7 @@ with client:
 ██║   ██║██╔████╔██║███████║██████╔╝   ██║      ██║   ██║██╔████╔██║█████╗  
 ██║   ██║██║╚██╔╝██║██╔══██║██╔═══╝    ██║      ██║   ██║██║╚██╔╝██║██╔══╝  
 ╚██████╔╝██║ ╚═╝ ██║██║  ██║██║        ██║      ██║   ██║██║ ╚═╝ ██║███████╗
- ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝      ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝
+ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝      ╚══╝   ╚═╝╚═╝     ╚═╝╚══════╝
 """
     print(banner)
     client.loop.run_until_complete(asyncio.gather(main(), change_name()))
