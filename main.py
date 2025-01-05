@@ -15,7 +15,7 @@ api_hash = '60b28759c231d582aa4fc06042e5ad65'
 phone_number = '0096407864864798'
 
 # إنشاء عميل Telegram
-client = TelegramClient('Raafat', api_id, api_hash)
+client = TelegramClient('Oliver', api_id, api_hash)
 SETTINGS_FILE = "settings.json"
 
 # تحميل أو إنشاء ملف الإعدادات
