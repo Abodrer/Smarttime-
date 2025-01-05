@@ -6,59 +6,57 @@ import os
 import asyncio
 from colorama import Fore, Style, init
 
+# تهيئة الألوان
 init(autoreset=True)
+
+# إعدادات Telegram API
 api_id = 22997958
 api_hash = '60b28759c231d582aa4fc06042e5ad65'
+phone_number = '0096407864864798'
 
-client = TelegramClient('session_name', api_id, api_hash)
+# إنشاء عميل Telegram
+client = TelegramClient('Raafat', api_id, api_hash)
 SETTINGS_FILE = "settings.json"
 
-# تحميل الإعدادات أو إنشاء ملف جديد
+# تحميل أو إنشاء ملف الإعدادات
 if os.path.exists(SETTINGS_FILE):
     with open(SETTINGS_FILE, "r") as f:
         settings = json.load(f)
 else:
     settings = {"format": "12", "my_id": None}
 
-if "my_id" not in settings:
-    settings["my_id"] = None
+# ضمان وجود المفتاح "my_id" في الإعدادات
+settings.setdefault("my_id", None)
 
-with open(SETTINGS_FILE, "w") as f:
-    json.dump(settings, f)
-
-# حفظ الإعدادات إلى ملف
+# حفظ الإعدادات
 def save_settings():
     with open(SETTINGS_FILE, "w") as f:
         json.dump(settings, f)
 
-# تحويل الوقت إلى أرقام مزخرفة
+# تحويل الوقت إلى أرقام جميلة
 def beautify_time(time_string):
     mapping = {"0": "𝟎", "1": "𝟏", "2": "𝟐", "3": "𝟑", "4": "𝟒",
                "5": "𝟓", "6": "𝟔", "7": "𝟕", "8": "𝟖", "9": "𝟗"}
     return ''.join(mapping.get(char, char) for char in time_string)
 
-# الحصول على الوقت بصيغة 12 أو 24 ساعة
+# الحصول على الوقت بالتنسيق المختار
 def get_time():
-    if settings["format"] == "12":
-        return datetime.now().strftime('%I:%M')
-    else:
-        return datetime.now().strftime('%H:%M')
+    return datetime.now().strftime('%I:%M' if settings["format"] == "12" else '%H:%M')
 
-# أمر .start
+# الأوامر
 @client.on(events.NewMessage(pattern=r'^\.start$'))
 async def dot_start(event):
     if event.sender_id == settings["my_id"]:
         await event.respond(
-            "<b>✨ أهلاً بك في سورس <u>𝗦𝗺𝗮𝗿𝘁𝗧𝗶𝗺𝗲</u>!</b>\n\n"
+            "<b>✨ أهلاً بيك بسورس <u>𝗦𝗺𝗮𝗿𝘁𝗧𝗶𝗺𝗲</u>! 👋</b>\n"
             "<i>🛠️ الأوامر المتاحة:</i>\n\n"
-            "<code>.set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
-            "<code>.set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
+            "<code>🔹 set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
+            "<code>🔹 set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
             "<b>⌚ يتم تحديث الوقت تلقائيًا حسب الإعدادات.</b>\n\n"
             "<a href='https://t.me/oliceer'>🧑‍💻 المطور: 𝗢𝗹𝗶𝗰𝗲𝗲𝗿</a>",
             parse_mode="html"
         )
 
-# أمر set_12
 @client.on(events.NewMessage(pattern='set_12'))
 async def set_12(event):
     if event.sender_id == settings["my_id"]:
@@ -66,7 +64,6 @@ async def set_12(event):
         save_settings()
         await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 12 ساعة.</b>", parse_mode="html")
 
-# أمر set_24
 @client.on(events.NewMessage(pattern='set_24'))
 async def set_24(event):
     if event.sender_id == settings["my_id"]:
@@ -74,7 +71,7 @@ async def set_24(event):
         save_settings()
         await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 24 ساعة.</b>", parse_mode="html")
 
-# تحديث الاسم تلقائيًا
+# تغيير الاسم حسب الوقت
 async def change_name():
     prev_time = ""
     while True:
@@ -88,15 +85,15 @@ async def change_name():
         except Exception as e:
             print(f"{Fore.RED}Error: {e}")
 
-# بدء الجلسة
+# تشغيل العميل
 async def main():
-    phone_number = input("Enter your phone number (with country code): ")
     await client.start(phone_number)
     if settings["my_id"] is None:
         me = await client.get_me()
         settings["my_id"] = me.id
         save_settings()
 
+# طباعة البنر وتشغيل المهام
 with client:
     banner = f"""
 {Fore.CYAN}{Style.BRIGHT}
