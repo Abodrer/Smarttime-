@@ -25,13 +25,17 @@ if os.path.exists(SETTINGS_FILE):
 else:
     settings = {"format": "12", "my_id": None}
 
-# ضمان وجود المفتاح "my_id" في الإعدادات
 settings.setdefault("my_id", None)
 
 # حفظ الإعدادات
 def save_settings():
     with open(SETTINGS_FILE, "w") as f:
         json.dump(settings, f)
+
+# إعادة تحميل الإعدادات
+def load_settings():
+    with open(SETTINGS_FILE, "r") as f:
+        return json.load(f)
 
 # تحويل الوقت إلى أرقام جميلة
 def beautify_time(time_string):
@@ -41,7 +45,8 @@ def beautify_time(time_string):
 
 # الحصول على الوقت بالتنسيق المختار
 def get_time():
-    return datetime.now().strftime('%I:%M' if settings["format"] == "12" else '%H:%M')
+    current_settings = load_settings()
+    return datetime.now().strftime('%I:%M' if current_settings["format"] == "12" else '%H:%M')
 
 # الأوامر
 @client.on(events.NewMessage(pattern=r'^\.start$'))
@@ -50,8 +55,8 @@ async def dot_start(event):
         await event.respond(
             "<b>✨ أهلاً بيك بسورس <u>𝗦𝗺𝗮𝗿𝘁𝗧𝗶𝗺𝗲</u>! 👋</b>\n"
             "<i>🛠️ الأوامر المتاحة:</i>\n\n"
-            "<code>🔹 set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
-            "<code>🔹 set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
+            "🔹 <code>set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
+            "🔹 <code>set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
             "<b>⌚ يتم تحديث الوقت تلقائيًا حسب الإعدادات.</b>\n\n"
             "<a href='https://t.me/oliceer'>🧑‍💻 المطور: 𝗢𝗹𝗶𝗰𝗲𝗲𝗿</a>",
             parse_mode="html"
