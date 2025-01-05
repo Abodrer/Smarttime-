@@ -1,2 +1,1 @@
-telethon==1.25.0
-colorama==0.4.6
+telethon colorama asyncio
