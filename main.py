@@ -1,3 +1,4 @@
+
 from telethon import TelegramClient, events
 from telethon.tl.functions.account import UpdateProfileRequest
 from datetime import datetime
@@ -12,7 +13,7 @@ init(autoreset=True)
 # إعدادات Telegram API
 api_id = 22997958
 api_hash = '60b28759c231d582aa4fc06042e5ad65'
-phone_number = '0096407864864798'
+
 
 # إنشاء عميل Telegram
 client = TelegramClient('Oliver', api_id, api_hash)
@@ -68,9 +69,8 @@ async def dot_start(event):
         await event.respond(
             "<b>✨ أهلاً بك في سورس <u>𝗦𝗺𝗮𝗿𝘁𝗧𝗶𝗺𝗲</u>! 👋</b>\n"
             "<i>🛠️ الأوامر المتاحة:</i>\n\n"
-            "<code>.الأنماط</code> - عرض الأنماط المتاحة.\n"
-            "<code>.set_12</code> - لتعيين تنسيق الوقت إلى 12 ساعة.\n"
-            "<code>.set_24</code> - لتعيين تنسيق الوقت إلى 24 ساعة.\n\n"
+            "<code>.الأنماط</code> - عرض الأنماط المتاحة لتزيين الوقت.\n"
+            "<code>.تنسيق الوقت</code> - عرض أنظمة تنسيق الوقت (12/24 ساعة).\n\n"
             "<b>⌚ يتم تحديث الوقت تلقائيًا حسب الإعدادات.</b>\n\n"
             "<a href='https://t.me/oliceer'>🧑‍💻 المطور: 𝗢𝗹𝗶𝗰𝗲𝗲𝗿</a>",
             parse_mode="html"
@@ -85,6 +85,16 @@ async def dot_styles(event):
             "<code>.مزخرف1</code> - نمط الزخرفة الأول.\n"
             "<code>.عربي</code> - الأرقام العربية.\n"
             "<code>.مزخرف2</code> - نمط الزخرفة الثاني.\n",
+            parse_mode="html"
+        )
+
+@client.on(events.NewMessage(pattern=r'^\.تنسيق الوقت$'))
+async def time_format_page(event):
+    if event.sender_id == settings["my_id"]:
+        await event.respond(
+            "<b>⌚ أنظمة التنسيق المتاحة:</b>\n\n"
+            "<code>.نظام12</code> - لتعيين تنسيق الوقت بنظام 12 ساعة.\n"
+            "<code>.نظام24</code> - لتعيين تنسيق الوقت بنظام 24 ساعة.\n",
             parse_mode="html"
         )
 
@@ -167,3 +177,4 @@ with client:
 """
     print(banner)
     client.loop.run_until_complete(asyncio.gather(main(), change_name()))
+
