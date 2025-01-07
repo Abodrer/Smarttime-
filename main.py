@@ -1,4 +1,3 @@
-
 from telethon import TelegramClient, events
 from telethon.tl.functions.account import UpdateProfileRequest
 from datetime import datetime
@@ -13,7 +12,6 @@ init(autoreset=True)
 # إعدادات Telegram API
 api_id = 22997958
 api_hash = '60b28759c231d582aa4fc06042e5ad65'
-
 
 # إنشاء عميل Telegram
 client = TelegramClient('Oliver', api_id, api_hash)
@@ -158,7 +156,7 @@ async def change_name():
 
 # تشغيل العميل
 async def main():
-    await client.start(phone_number)
+    await client.start()
     if settings["my_id"] is None:
         me = await client.get_me()
         settings["my_id"] = me.id
@@ -177,4 +175,3 @@ with client:
 """
     print(banner)
     client.loop.run_until_complete(asyncio.gather(main(), change_name()))
-
