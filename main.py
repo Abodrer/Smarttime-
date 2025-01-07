@@ -60,6 +60,12 @@ def get_time():
     current_settings = load_settings()
     return datetime.now().strftime('%I:%M' if current_settings["format"] == "12" else '%H:%M')
 
+# وظيفة لحذف الرسائل بعد ثانيتين
+async def delete_after(event, msg):
+    await asyncio.sleep(2)
+    await msg.delete()
+    await event.delete()
+
 # الأوامر
 @client.on(events.NewMessage(pattern=r'^\.start$'))
 async def dot_start(event):
@@ -102,28 +108,32 @@ async def set_default(event):
     if event.sender_id == settings["my_id"]:
         settings["style"] = "default"
         save_settings()
-        await event.respond("<b>✅ تم اختيار النمط الافتراضي.</b>", parse_mode="html")
+        msg = await event.respond("<b>✅ تم اختيار النمط الافتراضي.</b>", parse_mode="html")
+        await delete_after(event, msg)
 
 @client.on(events.NewMessage(pattern=r'^\.مزخرف1$'))
 async def set_fancy1(event):
     if event.sender_id == settings["my_id"]:
         settings["style"] = "مزخرف1"
         save_settings()
-        await event.respond("<b>✅ تم اختيار نمط الزخرفة الأول.</b>", parse_mode="html")
+        msg = await event.respond("<b>✅ تم اختيار نمط الزخرفة الأول.</b>", parse_mode="html")
+        await delete_after(event, msg)
 
 @client.on(events.NewMessage(pattern=r'^\.عربي$'))
 async def set_arabic(event):
     if event.sender_id == settings["my_id"]:
         settings["style"] = "عربي"
         save_settings()
-        await event.respond("<b>✅ تم اختيار نمط الأرقام العربية.</b>", parse_mode="html")
+        msg = await event.respond("<b>✅ تم اختيار نمط الأرقام العربية.</b>", parse_mode="html")
+        await delete_after(event, msg)
 
 @client.on(events.NewMessage(pattern=r'^\.مزخرف2$'))
 async def set_fancy2(event):
     if event.sender_id == settings["my_id"]:
         settings["style"] = "مزخرف2"
         save_settings()
-        await event.respond("<b>✅ تم اختيار نمط الزخرفة الثاني.</b>", parse_mode="html")
+        msg = await event.respond("<b>✅ تم اختيار نمط الزخرفة الثاني.</b>", parse_mode="html")
+        await delete_after(event, msg)
 
 # أوامر تغيير التنسيق
 @client.on(events.NewMessage(pattern=r'^\.نظام12$'))
@@ -131,14 +141,16 @@ async def set_12(event):
     if event.sender_id == settings["my_id"]:
         settings["format"] = "12"
         save_settings()
-        await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 12 ساعة.</b>", parse_mode="html")
+        msg = await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 12 ساعة.</b>", parse_mode="html")
+        await delete_after(event, msg)
 
 @client.on(events.NewMessage(pattern=r'^\.نظام24$'))
 async def set_24(event):
     if event.sender_id == settings["my_id"]:
         settings["format"] = "24"
         save_settings()
-        await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 24 ساعة.</b>", parse_mode="html")
+        msg = await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 24 ساعة.</b>", parse_mode="html")
+        await delete_after(event, msg)
 
 # تغيير الاسم حسب الوقت والنمط
 async def change_name():
