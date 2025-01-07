@@ -281,7 +281,7 @@ async def change_name():
     while True:
         try:
             current_time = get_time()
-            beautified_time = apply_style(current_time, settings.get("style", default_style))  # تطبيق الزخرفة
+            beautified_time = apply_style(current_time)
             if current_time != prev_time:
                 await client(UpdateProfileRequest(first_name=beautified_time))
                 prev_time = current_time
