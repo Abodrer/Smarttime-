@@ -82,6 +82,22 @@ styles = {
                                "5": "♦", "6": "♠", "7": "♣", "8": "♦", "9": "♥"}.get(char, char) for char in s),
 }
 
+default_style = "default"
+fancy_style1 = "مزخرف1"
+fancy_style2 = "مزخرف2"
+fancy_style3 = "مزخرف3"
+arabic_style = "عربي"
+circles_style = "دوائر"
+underline_style = "خط تحت"
+overline_style = "خط فوق"
+parentheses_style = "قوسين"
+math_style = "رياضيات"
+heart_style = "قلوب"
+square_style = "مربعات"
+arrows_style = "أسهم"
+joker_style = "جوكر"
+
+
 # تطبيق الزخرفة حسب النمط الحالي
 def apply_style(text):
     current_settings = load_settings()
