@@ -38,25 +38,12 @@ def load_settings():
             return json.load(f)
     return {"style": "default", "format": "12", "my_id": None}
 
-# تطبيق الزخرفة حسب النمط الحالي
-def apply_style(text, style):
-    return style(text)
-
-# الحصول على الوقت بالتنسيق المختار
-def get_time():
-    current_settings = load_settings()
-    return datetime.now().strftime('%I:%M' if current_settings["format"] == "12" else '%H:%M')
-
-# الوظائف الخاصة بالأنماط:
-def default_style(s):
-    return s
-
-# تأكد من أن الأنماط هي دوال أو دوال قابلة للتطبيق، لا سلاسل نصية
+# أنماط الزخرفة المختلفة
 styles = {
     "default": lambda s: s,  # النمط الافتراضي بدون زخرفة
     
     "مزخرف1": lambda s: ''.join({"0": "𝟎", "1": "𝟏", "2": "𝟐", "3": "𝟑", "4": "𝟒",
-                                 "5": "𝟓", "6": "𝟖", "7": "𝟖", "8": "𝟖", "9": "𝟗"}.get(char, char) for char in s),
+                                 "5": "𝟓", "6": "𝟖", "7": "𝟖", "8": "𝟘", "9": "𝟙"}.get(char, char) for char in s),
     
     "عربي": lambda s: ''.join({"0": "٠", "1": "١", "2": "٢", "3": "٣", "4": "٤",
                                "5": "٥", "6": "٦", "7": "٧", "8": "٨", "9": "٩"}.get(char, char) for char in s),
@@ -94,6 +81,24 @@ styles = {
     "جوكر": lambda s: ''.join({"0": "⧫", "1": "♦", "2": "♣", "3": "♠", "4": "♥",
                                "5": "♦", "6": "♠", "7": "♣", "8": "♦", "9": "♥"}.get(char, char) for char in s),
 }
+
+# تطبيق الزخرفة حسب النمط الحالي
+def apply_style(text):
+    current_settings = load_settings()
+    style = current_settings.get("style", "default")
+    return styles.get(style, lambda x: x)(text)
+
+# الحصول على الوقت بالتنسيق المختار
+def get_time():
+    current_settings = load_settings()
+    return datetime.now().strftime('%I:%M' if current_settings["format"] == "12" else '%H:%M')
+
+# تابع حذف الرسائل بعد ثانيتين
+async def delete_after(event, msg):
+    await asyncio.sleep(2)
+    await msg.delete()
+    await event.delete()
+
 
 # الأوامر
 @client.on(events.NewMessage(pattern=r'^\.start$'))
@@ -141,7 +146,7 @@ async def time_format_page(event):
             parse_mode="html"
         )
 
-# تغيير النمط# تغيير النمط
+# تغيير النمط
 @client.on(events.NewMessage(pattern=r'^\.افتراضي$'))
 async def set_default(event):
     if event.sender_id == settings["my_id"]:
@@ -289,4 +294,3 @@ with client:
 """
     print(banner)
     client.loop.run_until_complete(asyncio.gather(main(), change_name()))
-   
