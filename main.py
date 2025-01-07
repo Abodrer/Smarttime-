@@ -118,14 +118,14 @@ async def set_fancy2(event):
         await event.respond("<b>✅ تم اختيار نمط الزخرفة الثاني.</b>", parse_mode="html")
 
 # أوامر تغيير التنسيق
-@client.on(events.NewMessage(pattern='set_12'))
+@client.on(events.NewMessage(pattern=r'^\.نظام12$'))
 async def set_12(event):
     if event.sender_id == settings["my_id"]:
         settings["format"] = "12"
         save_settings()
         await event.respond("<b>✅ تم اختيار تنسيق الوقت بنظام 12 ساعة.</b>", parse_mode="html")
 
-@client.on(events.NewMessage(pattern='set_24'))
+@client.on(events.NewMessage(pattern=r'^\.نظام24$'))
 async def set_24(event):
     if event.sender_id == settings["my_id"]:
         settings["format"] = "24"
